@@ -1,4 +1,4 @@
-<h1>DuoMate</h1>
+<h1>DueMate</h1>
 
 <h2>1. Abstract</h2>
 <p>Duomate is an AI-powered assistant that helps students discover and track relevant tech opportunities like hackathons, internships, and scholarships. Using the Gemini API, it offers smart matching, resume-based suggestions, and timely reminders — all through a clean, beginner-friendly interface.</p>
