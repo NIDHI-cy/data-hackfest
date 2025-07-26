@@ -1,10 +1,10 @@
 <h1>DueMate</h1>
 
 <h2>1. Abstract</h2>
-<p>Duomate is an AI-powered assistant that helps students discover and track relevant tech opportunities like hackathons, internships, and scholarships. Using the Gemini API, it offers smart matching, resume-based suggestions, and timely reminders — all through a clean, beginner-friendly interface.</p>
+<p>Duemate is an AI-powered assistant that helps students discover and track relevant tech opportunities like hackathons, internships, and scholarships. Using the Gemini API, it offers smart matching, resume-based suggestions, and timely reminders — all through a clean, beginner-friendly interface.</p>
 
 <h2>2. Motivation</h2>
-<p>Students often miss valuable opportunities due to lack of awareness, missed deadlines, or irrelevant info. Duomate solves this by delivering personalized, curated updates — making it easier for students to find and apply to what truly fits their goals.</p>
+<p>Students often miss valuable opportunities due to lack of awareness, missed deadlines, or irrelevant info. Duemate solves this by delivering personalized, curated updates — making it easier for students to find and apply to what truly fits their goals.</p>
 
 <h2>3. Problem Statment</h2>
 <p>Students often miss out on valuable tech opportunities like hackathons, internships, and scholarships due to lack of awareness, forgotten deadlines, and overwhelming or irrelevant information. There is a need for a personalized solution that curates and tracks these opportunities based on individual goals and skills — helping students take timely, informed action without the stress.</p>
