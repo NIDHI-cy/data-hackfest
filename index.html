@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DueMate – Find Your Perfect Tech Opportunity</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: radial-gradient(circle at top left, #1e1e2f, #11111b);
+      font-family: 'Segoe UI', sans-serif;
+      color: #eaeaea;
+    }
+
+    .neon-btn {
+      background: linear-gradient(90deg, #ff00cc, #3333ff);
+      box-shadow: 0 0 12px rgba(255, 0, 255, 0.4), 0 0 18px rgba(51, 51, 255, 0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .neon-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255, 0, 255, 0.6), 0 0 30px rgba(51, 51, 255, 0.6);
+    }
+
+    .glass-card {
+      background: rgba(30, 30, 45, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+    }
+
+    .glow {
+      border: 1px solid #6c5ce7;
+      box-shadow: 0 0 8px rgba(108, 92, 231, 0.3);
+    }
+
+    .popup-notify {
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .file-input input[type="file"] {
+      display: none;
+    }
+
+    .toy-friend {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      animation: float 4s ease-in-out infinite;
+      width: 80px;
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    .toy-friend:hover .tooltip {
+      opacity: 1;
+      transform: translateY(-10px);
+    }
+
+    .tooltip {
+      position: absolute;
+      top: -40px;
+      right: 100%;
+      background: #111827;
+      padding: 6px 12px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 12px;
+      opacity: 0;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      box-shadow: 0 0 8px rgba(255, 0, 255, 0.3);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center px-6 py-10 relative">
+
+  <!-- 🔔 Top-Left Popup -->
+  <div id="signupPopup" class="fixed top-5 left-5 bg-gray-800 border border-pink-500 text-white px-4 py-3 rounded-lg shadow-lg popup-notify z-50">
+    <p class="text-sm">Didn’t sign up yet?</p>
+    <button onclick="openModal()" class="mt-2 bg-pink-500 hover:bg-pink-600 px-3 py-1 rounded text-xs">Sign In / Sign Up</button>
+  </div>
+
+  <!-- 🧸 Toy Friend -->
+  <div class="toy-friend" onclick="playSound()">
+    <div class="tooltip">Hi! I'm Duey, your AI buddy 👋</div>
+    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712100.png" alt="Buddy" />
+  </div>
+
+  <!-- 🔊 Sound -->
+  <audio id="hoverSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_0f4fc0e31d.mp3?filename=message-pop-alert-99308.mp3" preload="auto"></audio>
+
+  <!-- 🔐 Sign In Modal -->
+  <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-gray-900 text-white p-4 rounded-xl w-72 space-y-3">
+      <h2 class="text-md font-semibold text-center">👤 Sign In / Sign Up</h2>
+      <input id="authName" class="w-full p-2 rounded bg-gray-800 text-sm" placeholder="Your Name *" />
+      <input id="authEmail" type="email" class="w-full p-2 rounded bg-gray-800 text-sm" placeholder="Your Email *" />
+      <button onclick="saveUser()" class="bg-pink-600 hover:bg-pink-700 w-full py-2 rounded text-sm">✅ Continue</button>
+      <button onclick="closeModal()" class="text-gray-400 text-xs text-center w-full mt-1 underline">Cancel</button>
+    </div>
+  </div>
+
+  <!-- 📄 Main Form -->
+  <div class="glass-card max-w-3xl w-full rounded-2xl p-8 space-y-6 text-white" id="mainForm">
+    <div class="text-center space-y-1">
+      <h1 class="text-4xl font-extrabold text-pink-400">DueMate</h1>
+      <p class="text-gray-300 text-sm tracking-wide">Your personal AI-powered opportunity guide & buddy! 🧠</p>
+    </div>
+
+    <form class="grid gap-4" id="opportunityForm">
+      <input id="name" required class="glow w-full bg-gray-800 text-white p-3 rounded-lg" placeholder="Your Name *" />
+      <input id="email" required type="email" class="glow w-full bg-gray-800 text-white p-3 rounded-lg" placeholder="Your Email *" />
+      <input id="skills" required class="glow w-full bg-gray-800 text-white p-3 rounded-lg" placeholder="Skills (comma-separated) *" />
+      <input id="linkedin" type="url" class="glow w-full bg-gray-800 text-white p-3 rounded-lg" placeholder="LinkedIn Profile (optional)" />
+      <input id="github" type="url" class="glow w-full bg-gray-800 text-white p-3 rounded-lg" placeholder="GitHub Profile (optional)" />
+
+      <div>
+        <label class="block text-sm text-gray-400 mb-1">📎 Upload Resume (optional – PDF, DOCX, TXT, etc.)</label>
+        <div class="file-input glow border border-dashed border-pink-400 bg-gray-900 p-3 rounded-lg text-sm text-gray-300 flex justify-between items-center">
+          <span id="fileLabel" class="truncate w-3/4">No file selected</span>
+          <label class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1 rounded cursor-pointer">
+            Browse
+            <input id="resume" type="file" accept=".pdf,.doc,.docx,.txt,.rtf" onchange="document.getElementById('fileLabel').innerText = this.files[0]?.name || 'No file selected'" />
+          </label>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-4 text-sm text-gray-300 mt-2">
+        <label class="flex items-center space-x-2">
+          <input type="checkbox" id="beginnerOnly" />
+          <span>Beginner-friendly Only</span>
+        </label>
+        <label class="flex items-center space-x-2">
+          <input type="checkbox" id="onlineOnly" />
+          <span>Online</span>
+        </label>
+        <label class="flex items-center space-x-2">
+          <input type="checkbox" id="freeOnly" />
+          <span>Free</span>
+        </label>
+      </div>
+
+      <button id="submitBtn" class="neon-btn w-full text-white font-bold py-3 rounded-xl text-lg mt-4">
+        🔍 Find Opportunities
+      </button>
+    </form>
+
+    <div id="suggestions" class="text-green-400 font-medium text-sm mt-4"></div>
+    <div id="result" class="mt-4 space-y-4 text-sm"></div>
+    <div id="saved" class="mt-6 pt-4 border-t border-gray-700 text-purple-300 space-y-2 text-sm"></div>
+  </div>
+
+  <!-- 💻 JavaScript -->
+  <script>
+    function playSound() {
+      const sound = document.getElementById('hoverSound');
+      sound.currentTime = 0;
+      sound.play();
+    }
+
+    function openModal() {
+      document.getElementById('authModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('authModal').classList.add('hidden');
+    }
+
+    function saveUser() {
+      const name = document.getElementById('authName').value.trim();
+      const email = document.getElementById('authEmail').value.trim();
+      const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+      if (!name || !email) {
+        alert("Please enter both name and email.");
+        return;
+      }
+
+      if (!emailRegex.test(email)) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      localStorage.setItem('duemate_name', name);
+      localStorage.setItem('duemate_email', email);
+
+      document.getElementById('name').value = name;
+      document.getElementById('email').value = email;
+      document.getElementById('signupPopup').style.display = 'none';
+      closeModal();
+    }
+
+    window.onload = () => {
+      const name = localStorage.getItem('duemate_name');
+      const email = localStorage.getItem('duemate_email');
+
+      if (name && email) {
+        document.getElementById('name').value = name;
+        document.getElementById('email').value = email;
+        document.getElementById('signupPopup').style.display = 'none';
+      }
+    };
+
+    document.getElementById("submitBtn").addEventListener("click", async function (e) {
+      e.preventDefault();
+
+      const suggestions = document.getElementById("suggestions");
+      const resultDiv = document.getElementById("result");
+
+      suggestions.innerHTML = <img src="https://i.gifer.com/ZZ5H.gif" class="mx-auto w-12" />;
+      resultDiv.innerHTML = "";
+
+      const formData = new FormData();
+      formData.append("name", document.getElementById("name").value);
+      formData.append("email", document.getElementById("email").value);
+      formData.append("skills", document.getElementById("skills").value);
+      formData.append("linkedin", document.getElementById("linkedin").value);
+      formData.append("github", document.getElementById("github").value);
+      formData.append("resume", document.getElementById("resume").files[0]);
+      formData.append("beginnerOnly", document.getElementById("beginnerOnly").checked);
+      formData.append("onlineOnly", document.getElementById("onlineOnly").checked);
+      formData.append("freeOnly", document.getElementById("freeOnly").checked);
+
+      try {
+        const response = await fetch("http://localhost:5000/recommend", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        if (data.opportunities && data.opportunities.length >= 1) {
+          showResults(data.opportunities);
+        } else {
+          suggestions.innerText = "⚠ No relevant opportunities found.";
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        suggestions.innerText = "❌ Error fetching opportunities.";
+      }
+    });
+
+    function showResults(opps) {
+      const resultDiv = document.getElementById("result");
+      const suggestions = document.getElementById("suggestions");
+
+      resultDiv.innerHTML = "";
+      suggestions.innerText = "✨ Top Opportunities for You:";
+
+      opps.forEach((opp, idx) => {
+        resultDiv.innerHTML += `
+          <div class="p-4 bg-gray-800 rounded-xl border border-pink-500 space-y-2">
+            <h3 class="text-lg font-bold text-pink-400">💼 ${opp.title}</h3>
+            <p class="text-gray-300 text-sm">${opp.summary}</p>
+            <p class="text-yellow-300 text-xs">🗓 Deadline: ${opp.deadline}</p>
+            <a href="${opp.link}" target="_blank" class="text-blue-400 underline text-sm">🔗 View Details</a>
+            <button onclick="likeOpportunity(${idx})" class="mt-2 bg-pink-600 hover:bg-pink-700 text-white text-xs px-3 py-1 rounded">❤ Like</button>
+          </div>
+        `;
+      });
+    }
+
+    function likeOpportunity(index) {
+      alert(You liked opportunity #${index + 1} ❤);
+    }
+  </script>
+</body>
+</html>
